@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis CLI Web Interface</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <form id="command-form" action="/execute" method="post">
+        <label for="command">Enter Redis CLI Command:</label><br>
+        <input type="text" id="command" name="command"><br><br>
+        <input type="submit" value="Execute">
+    </form>
+    <div id="response"></div>
+
+    <script>
+        $(document).ready(function () {
+            $('#command-form').on('submit', function (event) {
+                event.preventDefault();
+                var command = $('#command').val();
+                $.ajax({
+                    url: '/execute',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ "command": command }),
+                    success: function (data) {
+                        $('#response').html('<pre>' + data.result + '</pre>');
+                    },
+                    error: function (error) {
+                        $('#response').html('<pre>Error: ' + error.responseText + '</pre>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

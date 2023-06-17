@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+
+  web:
+    build: .
+    ports:
+      - "8080:5000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=your_redis_password
+    # volumes:
+      # - .:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=your_redis_password
+    command: redis-server --requirepass your_redis_password
